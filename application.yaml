@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cachemgr
+  namespace: argocd # DO NOT CHANGE, this is a RED HERRING
+spec:
+  project: default   # Possiby group into repos
+
+  source:
+    repoURL: https://github.huit.harvard.edu/LTS/application-INFRA
+    targetRevision: main
+    path: envs/sandbox1
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: <<stack namespace>>
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=false
+
+    automated:
+      selfHeal: false
+      prune: true
