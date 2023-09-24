@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: application-ns            #NS name needs to be unique
+  labels:
+    name: application-ns                                                                                                                                 │
+│   istio-injection: enabled      #Enable ISTIO injection for newly created                                                                                                         │

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-service     #This name needs to be unique
+spec:
+  type: ClusterIP         #4 type of ClusterIP/NodePort/Headless & LoadBalancer
+  selector:
+    app: application      #selector need to tie up to line 9 in the deploy.yaml
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

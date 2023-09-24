@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: application-gateway       # gateway name unique same as service name (service.yaml)
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "<<application>>-sb.lib.harvard.edu"      # request your DNS to point to the Istio LB

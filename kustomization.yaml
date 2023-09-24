@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- config.yaml
+- deploy.yaml
+- ingress.yaml                  #Leave namespace.yaml out for the moment
+- secrets.yaml
+- service.yaml
+- virtualservice.yaml

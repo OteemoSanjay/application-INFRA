@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: application
+  template:
+    metadata:
+      labels:
+        app: application
+    spec:
+      containers:
+      - name: application
+        image: UPDATE_IMAGE_PATH_IN_VERSION_FILE_FOR_THE_CORRESPONDING_ENVIRONMENT
+        securityContext:
+          runAsUser: 55008          # please change your userid here
+        ports:
+        - containerPort: 3000       # please change your POD port here
+        env:
+        - name: A_PASSWORD          # these are env variables which are used by the app
+          valueFrom:
+            secretKeyRef:
+              name: secrets-application   # this should have a reference to the secrets.yaml
+              key: A_PASSWORD
+        envFrom:
+        - configMapRef:
+             name: application-config-file    # This is the configmaps reference
+        volumeMounts:                         # This is an example of the .env VM
+        #- name: env-volume
+        #  mountPath: /home/node/.env
+        #  readOnly: true
+        #  subPath: application.env
+        - name: logs-volume
+          mountPath: /home/node/logs
+
+        readinessProbe:
+          exec:
+            command:
+            - /home/node/healthcheck/healthcheck
+            - http://localhost:3000/healthcheck
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 4
+      volumes:
+      #- name: env-volume
+      #  hostPath:
+      #    path: /docker/nrs/config
+      - name: logs-volume
+        hostPath:
+          path: /docker/nrs/logs/application
